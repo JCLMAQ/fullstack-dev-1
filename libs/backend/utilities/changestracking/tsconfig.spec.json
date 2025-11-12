@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../../dist/out-tsc",
+    "module": "NodeNext",
+    "moduleResolution": "node10",
+    "types": [
+      "jest",
+      "node"
+    ]
+  },
+  "include": [
+    "jest.config.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "../db/index.ts",
+    "../db/generated/**/*.ts",
+    "../../prisma-client/src/**/*",
+    "../../db/index.ts",
+    "../../db/generated/**/*.ts"
+  ]
+}

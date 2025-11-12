@@ -1,0 +1,48 @@
+@use "@angular/material" as mat;
+@include mat.elevation-classes();
+@include mat.app-background();
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: Inter, "Helvetica Neue", sans-serif;
+  --primary-color: var(--sys-primary);
+}
+
+mat-form-field {
+  display: block !important;
+
+  @include mat.theme(
+    (
+      density: -2,
+    )
+  );
+}
+
+$custom-theme: mat.define-theme(
+  (
+    color: (
+      use-system-variables: true,
+      system-variables-prefix: sys,
+    ),
+    typography: (
+      plain-family: 'Inter, "Helvetica Neue", sans-serif,',
+    ),
+  )
+);
+
+$compact-theme: mat.define-theme(
+  (
+    density: (
+      scale: -2,
+    ),
+  )
+);
+
+html {
+  @include mat.all-component-themes($custom-theme);
+  @include mat.form-field-density($compact-theme);
+}

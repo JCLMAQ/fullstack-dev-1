@@ -1,0 +1,99 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "composite": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "importHelpers": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": ["ES2022", "dom"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "customConditions": ["@fullstack-dev-1/source"],
+    "paths": {
+      "@be/address": ["libs/backend/data-access/address/src/index.ts"],
+      "@be/appEmailDomains": [
+        "libs/backend/data-access/appEmailDomains/src/index.ts"
+      ],
+      "@be/categories": ["libs/backend/data-access/categories/src/index.ts"],
+      "@be/changestracking": [
+        "libs/backend/utilities/changestracking/src/index.ts"
+      ],
+      "@be/comments": ["libs/backend/data-access/comments/src/index.ts"],
+      "@be/configParams": [
+        "libs/backend/data-access/configParams/src/index.ts"
+      ],
+      "@be/db-config": ["libs/backend/utilities/db-config/src/index.ts"],
+      "@be/exception-filter": [
+        "libs/backend/utilities/exception-filter/src/index.ts"
+      ],
+      "@be/files": ["libs/backend/data-access/files/src/index.ts"],
+      "@be/files-utilities": [
+        "libs/backend/utilities/files-utilities/src/index.ts"
+      ],
+      "@be/groups": ["libs/backend/data-access/groups/src/index.ts"],
+      "@be/iam": ["libs/backend/iam/src/index.ts"],
+      "@be/images": ["libs/backend/data-access/images/src/index.ts"],
+      "@be/mails": ["libs/backend/utilities/mails/src/index.ts"],
+      "@be/orgDomains": ["libs/backend/data-access/orgDomains/src/index.ts"],
+      "@be/orgEmailUseTos": [
+        "libs/backend/data-access/orgEmailUseTos/src/index.ts"
+      ],
+      "@be/orgEmails": ["libs/backend/data-access/orgEmails/src/index.ts"],
+      "@be/organizations": [
+        "libs/backend/data-access/organizations/src/index.ts"
+      ],
+      "@be/phones": ["libs/backend/data-access/phones/src/index.ts"],
+      "@be/postLikes": ["libs/backend/data-access/postLikes/src/index.ts"],
+      "@be/posts": ["libs/backend/data-access/posts/src/index.ts"],
+      "@be/profiles": ["libs/backend/data-access/profiles/src/index.ts"],
+      "@be/stories": ["libs/backend/data-access/stories/src/index.ts"],
+      "@be/tasks": ["libs/backend/data-access/tasks/src/index.ts"],
+      "@be/time-util": ["libs/backend/utilities/time-util/src/index.ts"],
+      "@be/todos": ["libs/backend/data-access/todos/src/index.ts"],
+      "@be/userFollowers": [
+        "libs/backend/data-access/userFollowers/src/index.ts"
+      ],
+      "@be/users": ["libs/backend/data-access/users/src/index.ts"],
+      "@db/prisma": ["libs/db/index.ts"],
+      "@db/prisma-client": ["libs/backend/prisma-client/src/index.ts"],
+      "@fe/app/data": ["apps/frontend/dev-app/src/app/data"],
+      "@fe/auth": ["libs/frontend/core/auth/src/index.ts"],
+      "@fe/dashboard": [
+        "libs/frontend/shared/components/dashboard/src/index.ts"
+      ],
+      "@fe/image": [
+        "libs/frontend/shared/components/image-uploader/src/index.ts"
+      ],
+      "@fe/layout": ["libs/frontend/core/layout/src/index.ts"],
+      "@fe/loading-container": [
+        "libs/frontend/shared/components/loading-container/src/index.ts"
+      ],
+      "@fe/material": ["libs/frontend/shared/material/src/index.ts"],
+      "@fe/pages": ["libs/frontend/core/pages/src/index.ts"],
+      "@fe/services": ["libs/frontend/core/services/src/index.ts"],
+      "@fe/file-mgt": [
+        "libs/frontend/shared/components/file-mgt/src/index.ts"
+      ],
+      "@fe/image-mgt": [
+        "libs/frontend/shared/components/image-mgt/src/index.ts"
+      ],
+      "@fe/shared/utilities": ["libs/frontend/shared/utils/index.ts"],
+      "@fe/stores": ["libs/frontend/core/stores/src/index.ts"],
+      "@fe/tokens": ["libs/frontend/core/tokens/src/index.ts"],
+      "@fe/ui": ["libs/frontend/shared/components/dashboard/src/index.ts"],
+      "@fe/user": ["libs/frontend/domains/user/src/index.ts"]
+    }
+  }
+}

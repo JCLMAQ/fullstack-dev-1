@@ -1,0 +1,58 @@
+<div cdkDropListGroup>
+  <lib-dashboard-header />
+  <div
+    #dashboard
+    class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] auto-rows-[150px] gap-4"
+  >
+    @for (widget of store.addedWidgets(); track widget.id) {
+    <lib-widget
+      [data]="widget"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="widget.id"
+    />
+    }
+    <div cdkDropList (cdkDropListDropped)="drop($event)">
+      <div></div>
+    </div>
+  </div>
+</div>
+<div>
+  <span> user = {{ appStore.user()?.email }}</span>
+  <br />
+
+  <span> user full name = {{ appStore.user()?.nickName }}</span>
+  <br />
+
+  <span> modeSideNav = {{ reponsiveService.modeSideNav() }}</span>
+  <br />
+
+  <span> sideNavWidth = {{ reponsiveService.sideNavWidth() }}</span>
+  <br />
+
+  <span> sideNavOpen = {{ reponsiveService.sideNavOpen() }}</span>
+  <br />
+  @if(reponsiveService.isMenuBarOpen()) {
+  <span>isMenuBarOpen = true</span>
+  } @else {
+  <span>isMenuBarOpen = false</span>
+  }
+  <br />
+  @if(reponsiveService.isMobile()) {
+  <span>isMobile = true</span>
+  } @else {
+  <span>isMobile = false</span>
+  }
+  <br />
+  @if(this.reponsiveService.mobileLimitWidth()) {
+  <span> mobile limit = true</span>
+  } @else {
+  <span> mobile limit = false</span>
+  }
+  <br />
+  @if(reponsiveService.isCollapsed()) {
+  <span> collapsed = true</span>
+  } @else {
+  <span> collapsed = false</span>
+  }
+</div>

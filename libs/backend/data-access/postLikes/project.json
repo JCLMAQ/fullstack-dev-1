@@ -1,0 +1,9 @@
+{
+  "name": "postLikes",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/data-access/postLikes/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project postLikes --web",
+  "targets": {}
+}

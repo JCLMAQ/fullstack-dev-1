@@ -1,0 +1,129 @@
+// Image Upload Manager Component Styles - Inspired by user-profile design
+.drop-zone {
+  border: 2px dashed #d1d5db;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+  }
+
+  &.dragover {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+    transform: scale(1.02);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+
+  &.has-files {
+    text-align: left;
+    padding: 1rem;
+  }
+}
+
+// File preview styling consistent with user-profile forms
+.files-preview {
+  .file-item {
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+}
+
+// Form elements consistency with user-profile
+.metadata-form {
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.2s;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+  }
+
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+  }
+
+  // Checkbox styling
+  input[type="checkbox"] {
+    height: 1rem;
+    width: 1rem;
+    color: #2563eb;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+  }
+}
+
+// Button styling consistent with user-profile
+button {
+  transition: all 0.2s;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .drop-zone {
+    padding: 1.5rem;
+  }
+
+  .files-preview {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+}
+
+// Styles pour les chips de tags
+::ng-deep .upload-manager {
+  mat-chip-grid {
+    mat-chip-row {
+      .mat-mdc-chip-action-label {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

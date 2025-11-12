@@ -1,0 +1,28 @@
+{
+  "extends": "../../../../tsconfig.base.json",
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "importHelpers": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "composite": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "../../prisma-client"
+    },
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

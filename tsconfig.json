@@ -1,0 +1,94 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./libs/frontend/core/layout"
+    },
+    {
+      "path": "./libs/frontend/shared/components/dashboard"
+    },
+    {
+      "path": "./libs/backend/data-access/appEmailDomains"
+    },
+    {
+      "path": "./libs/backend/data-access/orgEmailUseTos"
+    },
+    {
+      "path": "./libs/backend/utilities/changestracking"
+    },
+    {
+      "path": "./libs/backend/utilities/exeption-filter"
+    },
+    {
+      "path": "./libs/backend/data-access/organizations"
+    },
+    {
+      "path": "./libs/backend/data-access/userFollowers"
+    },
+    {
+      "path": "./libs/backend/data-access/configParams"
+    },
+    {
+      "path": "./libs/backend/data-access/categories"
+    },
+    {
+      "path": "./libs/backend/data-access/orgDomains"
+    },
+    {
+      "path": "./libs/backend/data-access/orgEmails"
+    },
+    {
+      "path": "./libs/backend/data-access/postLikes"
+    },
+    {
+      "path": "./libs/backend/data-access/comments"
+    },
+    {
+      "path": "./libs/backend/data-access/profiles"
+    },
+    {
+      "path": "./libs/backend/data-access/address"
+    },
+    {
+      "path": "./libs/backend/utilities/db-config"
+    },
+    {
+      "path": "./libs/backend/data-access/stories"
+    },
+    {
+      "path": "./libs/backend/utilities/time-util"
+    },
+    {
+      "path": "./libs/backend/data-access/groups"
+    },
+    {
+      "path": "./libs/backend/data-access/images"
+    },
+    {
+      "path": "./libs/backend/data-access/phones"
+    },
+    {
+      "path": "./libs/backend/data-access/files"
+    },
+    {
+      "path": "./libs/backend/data-access/posts"
+    },
+    {
+      "path": "./libs/backend/data-access/tasks"
+    },
+    {
+      "path": "./libs/backend/data-access/todos"
+    },
+    {
+      "path": "./libs/backend/data-access/users"
+    },
+    {
+      "path": "./libs/backend/utilities/mails"
+    },
+    {
+      "path": "./libs/backend/prisma-client"
+    }
+  ]
+}

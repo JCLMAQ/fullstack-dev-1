@@ -1,0 +1,282 @@
+<div class="file-management-container">
+  <mat-card class="header-card">
+    <mat-card-header class="text-center">
+      <mat-card-title class="mat-headline-4">
+        {{ 'FILE_MANAGEMENT.TITLE' | translate }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ 'FILE_MANAGEMENT.DESCRIPTION' | translate }}
+      </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <div class="main-content">
+    <mat-card class="main-card">
+      <!-- Section Filtres et Recherche -->
+      <mat-card class="filters-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{ 'FILE_MANAGEMENT.FILTERS' | translate }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="filters-grid">
+            <!-- Recherche -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FILE_MANAGEMENT.SEARCH' | translate }}</mat-label>
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="performSearch()"
+                [placeholder]="'FILE_MANAGEMENT.SEARCH_PLACEHOLDER' | translate"
+              />
+              <mat-icon matSuffix (click)="performSearch()" class="cursor-pointer">search</mat-icon>
+            </mat-form-field>
+
+            <!-- Filtre Type -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FILE_MANAGEMENT.FILTER_TYPE' | translate }}</mat-label>
+              <mat-select
+                [(ngModel)]="selectedMimeType"
+                (selectionChange)="applyFilters()"
+              >
+                <mat-option value="">{{ 'FILE_MANAGEMENT.ALL_TYPES' | translate }}</mat-option>
+                <mat-option value="application/pdf">PDF</mat-option>
+                <mat-option value="application/vnd.ms-word">Word</mat-option>
+                <mat-option value="application/vnd.ms-excel">Excel</mat-option>
+                <mat-option value="application/vnd.ms-powerpoint">PowerPoint</mat-option>
+                <mat-option value="text/plain">Texte</mat-option>
+                <mat-option value="application/zip">Archive</mat-option>
+                <mat-option value="video/">Vidéo</mat-option>
+                <mat-option value="audio/">Audio</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Filtre Visibilité -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FILE_MANAGEMENT.VISIBILITY' | translate }}</mat-label>
+              <mat-select
+                [(ngModel)]="selectedVisibility"
+                (selectionChange)="applyFilters()"
+              >
+                <mat-option [value]="null">{{ 'FILE_MANAGEMENT.ALL_VISIBILITY' | translate }}</mat-option>
+                <mat-option [value]="true">{{ 'FILE_MANAGEMENT.PUBLIC' | translate }}</mat-option>
+                <mat-option [value]="false">{{ 'FILE_MANAGEMENT.PRIVATE' | translate }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Actions globales -->
+          <div class="actions-toolbar">
+            <button
+              mat-raised-button
+              [color]="selectionMode() ? 'accent' : 'primary'"
+              (click)="toggleSelectionMode()"
+            >
+              <mat-icon>{{ selectionMode() ? 'close' : 'checklist' }}</mat-icon>
+              {{ selectionMode() ? ('FILE_MANAGEMENT.EXIT_SELECTION' | translate) : ('FILE_MANAGEMENT.ENTER_SELECTION' | translate) }}
+            </button>
+
+            <button
+              mat-raised-button
+              (click)="refreshFiles()"
+              [disabled]="loading()"
+            >
+              <mat-icon>refresh</mat-icon>
+              {{ 'FILE_MANAGEMENT.REFRESH' | translate }}
+            </button>
+
+            <!-- Mode d'affichage -->
+            <mat-button-toggle-group [(ngModel)]="viewMode" aria-label="Mode d'affichage">
+              <mat-button-toggle value="gallery">
+                <mat-icon>view_module</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle value="list">
+                <mat-icon>view_list</mat-icon>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Onglets -->
+      <mat-tab-group [(selectedIndex)]="activeTab" class="management-tabs">
+        <!-- Onglet Galerie -->
+        <mat-tab [label]="'FILE_MANAGEMENT.GALLERY_TAB' | translate">
+          <div class="pt-6 space-y-6">
+            <!-- Statistiques -->
+            <mat-card class="stats-card" *ngIf="!loading()">
+              <mat-card-content>
+                <div class="stats-grid">
+                  <div class="stat-item">
+                    <div class="mat-headline-3">{{ totalFiles() }}</div>
+                    <div class="mat-body-2 text-muted">{{ 'FILE_MANAGEMENT.TOTAL_FILES' | translate }}</div>
+                  </div>
+                  <div class="stat-item" *ngIf="selectedFiles().length > 0">
+                    <div class="mat-headline-3 text-primary">{{ selectedFiles().length }}</div>
+                    <div class="mat-body-2 text-muted">{{ 'FILE_MANAGEMENT.SELECTED' | translate }}</div>
+                  </div>
+                  <div class="stat-item">
+                    <div class="mat-headline-3">{{ formatFileSize(totalSize()) }}</div>
+                    <div class="mat-body-2 text-muted">{{ 'FILE_MANAGEMENT.TOTAL_SIZE' | translate }}</div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Galerie de fichiers -->
+            <mat-card class="files-gallery-card">
+              <mat-card-content>
+                <div *ngIf="loading()" class="loading-container">
+                  <mat-spinner></mat-spinner>
+                  <span>{{ 'FILE_MANAGEMENT.LOADING' | translate }}</span>
+                </div>
+
+                <div *ngIf="!loading() && displayedFiles().length === 0" class="empty-state">
+                  <mat-icon>folder_open</mat-icon>
+                  <h3>{{ 'FILE_MANAGEMENT.NO_FILES' | translate }}</h3>
+                  <p>{{ 'FILE_MANAGEMENT.NO_FILES_DESC' | translate }}</p>
+                </div>
+
+                <div *ngIf="!loading() && displayedFiles().length > 0" class="files-grid" [class.list-view]="viewMode === 'list'">
+                  @for (file of displayedFiles(); track file.id) {
+                    <mat-card class="file-card" [class.selected]="selectedFiles().includes(file)">
+                      <mat-card-header>
+                        <mat-icon mat-card-avatar>{{ fileService.getMimeTypeIcon(file.mimeType) }}</mat-icon>
+                        <mat-card-title class="file-name">{{ file.originalName }}</mat-card-title>
+                        <mat-card-subtitle>{{ formatFileSize(file.fileSize) }}</mat-card-subtitle>
+
+                        <div class="card-actions">
+                          @if (selectionMode()) {
+                            <mat-checkbox
+                              [checked]="selectedFiles().includes(file)"
+                              (change)="toggleFileSelection(file)">
+                            </mat-checkbox>
+                          } @else {
+                            <button mat-icon-button [matMenuTriggerFor]="fileMenu">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #fileMenu="matMenu">
+                              <button mat-menu-item (click)="downloadFile(file)">
+                                <mat-icon>download</mat-icon>
+                                <span>{{ 'FILE_MANAGEMENT.DOWNLOAD' | translate }}</span>
+                              </button>
+                              <button mat-menu-item (click)="editFile(file)">
+                                <mat-icon>edit</mat-icon>
+                                <span>{{ 'FILE_MANAGEMENT.EDIT' | translate }}</span>
+                              </button>
+                              <mat-divider></mat-divider>
+                              <button mat-menu-item (click)="deleteFile(file)" class="warn-action">
+                                <mat-icon>delete</mat-icon>
+                                <span>{{ 'FILE_MANAGEMENT.DELETE' | translate }}</span>
+                              </button>
+                            </mat-menu>
+                          }
+                        </div>
+                      </mat-card-header>
+
+                      <mat-card-content>
+                        <div class="file-details">
+                          <div class="detail-row">
+                            <span class="label">{{ 'FILE_MANAGEMENT.TYPE' | translate }}:</span>
+                            <span class="value">{{ file.mimeType }}</span>
+                          </div>
+                          <div class="detail-row" *ngIf="file.description">
+                            <span class="label">{{ 'FILE_MANAGEMENT.DESCRIPTION' | translate }}:</span>
+                            <span class="value">{{ file.description }}</span>
+                          </div>
+                          <div class="detail-row">
+                            <span class="label">{{ 'FILE_MANAGEMENT.CREATED' | translate }}:</span>
+                            <span class="value">{{ file.createdAt | date:'short' }}</span>
+                          </div>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+                  }
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Pagination -->
+            <mat-paginator
+              *ngIf="!loading() && totalFiles() > pageSize"
+              [length]="totalFiles()"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="pageSizeOptions"
+              [pageIndex]="currentPage"
+              (page)="onPageChange($event)"
+              class="gallery-paginator">
+            </mat-paginator>
+          </div>
+        </mat-tab>
+
+        <!-- Onglet Upload -->
+        <mat-tab [label]="'FILE_MANAGEMENT.UPLOAD_TAB' | translate">
+          <div class="pt-6">
+            <mat-card class="upload-card">
+              <mat-card-header>
+                <mat-card-title>{{ 'FILE_MANAGEMENT.UPLOAD_TITLE' | translate }}</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <!-- Simplified upload interface for now -->
+                <div class="upload-area" (dragover)="onDragOver($event)" (drop)="onFileDrop($event)">
+                  <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                  <h3>{{ 'FILE_MANAGEMENT.DRAG_DROP' | translate }}</h3>
+                  <p>{{ 'FILE_MANAGEMENT.OR' | translate }}</p>
+                  <button mat-raised-button color="primary" (click)="fileInput.click()">
+                    <mat-icon>add</mat-icon>
+                    {{ 'FILE_MANAGEMENT.SELECT_FILES' | translate }}
+                  </button>
+                  <input #fileInput type="file" multiple class="hidden" (change)="onFileSelected($event)">
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-tab>
+
+        <!-- Onglet Administration (optionnel) -->
+        <mat-tab [label]="'FILE_MANAGEMENT.ADMIN_TAB' | translate" *ngIf="showAdminTab()">
+          <div class="admin-content">
+            <mat-card class="maintenance-card">
+              <mat-card-header>
+                <mat-card-title>
+                  {{ 'FILE_MANAGEMENT.MAINTENANCE' | translate }}
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="admin-actions">
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="cleanupUnusedFiles()"
+                  >
+                    <mat-icon>delete_sweep</mat-icon>
+                    {{ 'FILE_MANAGEMENT.CLEANUP_UNUSED' | translate }}
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    (click)="findDuplicates()"
+                  >
+                    <mat-icon>content_copy</mat-icon>
+                    {{ 'FILE_MANAGEMENT.FIND_DUPLICATES' | translate }}
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    (click)="exportFilesList()"
+                  >
+                    <mat-icon>download</mat-icon>
+                    {{ 'FILE_MANAGEMENT.EXPORT_LIST' | translate }}
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+</div>

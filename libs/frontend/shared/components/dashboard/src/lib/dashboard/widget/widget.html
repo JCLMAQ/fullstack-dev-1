@@ -1,0 +1,19 @@
+<div
+  class="h-full w-full p-7 relative mat-elevation-z3 overflow-hidden box-border rounded-[inherit]"
+  cdkDrag
+  cdkDragPreviewContainer="parent"
+  [style.background-color]="
+        data().backgroundColor ?? 'var(--sys-surface-bright)'
+      "
+  [style.color]="data().color ?? 'inherit'"
+>
+  <lib-widget-header [data]="data()" [(showOptions)]="showOptions" />
+
+  <ng-container [ngComponentOutlet]="data().content" />
+
+  @if (showOptions()) {
+  <lib-widget-options [data]="data()" [(showOptions)]="showOptions" />
+  }
+
+  <div *cdkDragPlaceholder></div>
+</div>

@@ -1,0 +1,37 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../../dist/out-tsc",
+    "declaration": true,
+    "types": [
+      "node"
+    ],
+    "target": "es2021",
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "../../../db/index.ts",
+    "../../../db/generated/**/*.ts",
+    "../../prisma-client/src/index.ts",
+    "../../db/index.ts",
+    "../../db/generated/**/*.ts",
+    "../../prisma-client/src/lib/*.ts"
+  ],
+  "exclude": [
+    "jest.config.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "../../prisma-client/src/**/*.spec.ts",
+    "../../prisma-client/src/**/*.test.ts"
+  ],
+  "references": [
+    {
+      "path": "../../prisma-client/tsconfig.lib.json"
+    }
+  ]
+}

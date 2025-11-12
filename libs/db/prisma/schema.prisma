@@ -1,0 +1,776 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider               = "prisma-client"
+  output                 = "../generated/prisma"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
+}
+
+// generator nestjsDto {
+//   provider                        = "prisma-generator-nestjs-dto"
+//   output                          = "../generated/nestjs-dto"
+//   prismaClientImportPath          = ""
+//   outputToNestJsResourceStructure = "ftrue"
+//   flatResourceStructure           = "false"
+//   exportRelationModifierClasses   = "true"
+//   reExport                        = "true"
+//   generateFileTypes               = "all"
+//   createDtoPrefix                 = "Create"
+//   updateDtoPrefix                 = "Update"
+//   dtoSuffix                       = "Dto"
+//   entityPrefix                    = ""
+//   entitySuffix                    = "Entity"
+//   classValidation                 = "false"
+//   fileNamingStyle                 = "camel"
+//   noDependencies                  = "false"
+//   outputType                      = "class"
+//   definiteAssignmentAssertion     = "false"
+//   requiredResponseApiProperty     = "true"
+//   prettier                        = "false"
+//   wrapRelationsAsType             = "false"
+//   showDefaultValues               = "false"
+// }
+
+enum TaskState {
+  CREATION
+  STANDBY
+  RUNNING
+  DONE
+}
+
+enum TodoState {
+  CREATION
+  STANDBY
+  RUNNING
+  DONE
+}
+
+enum Gender {
+  MALE
+  FEMELE
+  UNKNOWN
+  NONE
+}
+
+enum Title {
+  Mr
+  Mme
+  Dct
+}
+
+enum Position {
+  Manager
+  Member
+  Individual
+  Secretary
+}
+
+enum PhoneType {
+  Mobile
+  Home
+  Work
+  Organisation
+  Other
+}
+
+enum AddressType {
+  Home
+  Work
+  Organisation
+  Other
+}
+
+enum Language {
+  en
+  fr
+}
+
+enum Role {
+  GUEST
+  USER
+  ADMIN
+  SUPERADMIN
+  REGULAR
+}
+
+enum PermissionClaim {
+  CreateCoffee
+  UpdateCoffee
+  DeleteCoffee
+}
+
+enum TokenType {
+  EMAIL
+  API
+  FORGOT
+  ACCOUNT
+  REFREZH
+}
+
+model Organization {
+  id           String         @id() @default(uuid(7))
+  numSeq       Int            @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now()) @updatedAt()
+  published    Boolean?       @default(false)
+  isPublic     Boolean?       @default(true)
+  isDeleted    Int?           @default(0)
+  isDeletedDT  DateTime?
+  name         String         @unique()
+  description  String?
+  address      Json?          @db.Json()
+  emailITAdmin String
+  webSite      String?
+  OrgEmails    OrgEmail[]     @relation("OrgEmails")
+  OrgDomains   OrgDomain[]    @relation("OrgDomains")
+  mainOrg      Organization?  @relation("OrgSelfRelation", fields: [mainOrgId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  mainOrgId    String?
+  OrgEntity    Organization[] @relation("OrgSelfRelation")
+  Members      User[]
+  Posts        Post[]
+  Groups       Group[]
+  Files        File[]          @relation("OrganizationFiles")
+  Tasks        Task[]
+  Todos        Todo[]
+  Images       Image[]        @relation("OrgImages")
+}
+
+model OrgEmail {
+  id             Int             @id() @default(autoincrement())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt()
+  published      Boolean         @default(true)
+  isPublic       Boolean         @default(true)
+  isDeleted      Int             @default(0)
+  isDeletedDT    DateTime?
+  email          String
+  description    String?
+  org            Organization?   @relation("OrgEmails", fields: [orgId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  orgId          String
+  OrgEmailUseTos OrgEmailUseTo[]
+}
+
+model OrgDomain {
+  id          Int           @id() @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt()
+  published   Boolean       @default(true)
+  isPublic    Boolean       @default(true)
+  isDeleted   Int           @default(0)
+  isDeletedDT DateTime?
+  domainName  String
+  extension   String
+  org         Organization? @relation("OrgDomains", fields: [orgId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  orgId       String
+}
+
+model User {
+  id            String            @id() @default(uuid(7))
+  numSeq        Int               @default(autoincrement())
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @default(now()) @updatedAt()
+  published     Boolean?          @default(false)
+  isPublic      Boolean?          @default(true)
+  isDeleted     Int?              @default(0)
+  isDeletedDT   DateTime?
+  email         String            @unique()
+  lastName      String?
+  firstName     String?
+  title         Title?
+  nickName      String?
+  Gender        Gender?           @default(UNKNOWN)
+  social        Json?             @db.Json()
+  Language      Language?         @default(en)
+  photoUrl      String?
+  dateOfBirth   DateTime?
+  hasEmergencyContact Boolean   @default(false)
+  emergencyContactName String?
+  emergencyContactPhone String?
+  phone         Phone[]
+  position      Position?         @default(Individual)
+  address       Address[]
+  jobTitle      String?
+
+  isValidated   DateTime?
+  isSuspended   DateTime?
+  Orgs          Organization[]
+  manager       User?             @relation("ManagerTeams", fields: [managerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  managerId     String?
+  Team          User[]            @relation("ManagerTeams")
+  Profiles      Profile[]         @relation("UsersProfiles")
+  Groups        Group[]
+  Posts         Post[]
+  Comments      Comment[]
+  Stories       Story[]
+  Todo          UserTodoLink[]
+  TodosAuthor   Todo[]
+  Tasks         UserTaskLink[]
+  TasksAuthor   Task[]
+
+  // File relations
+  ownedFiles    File[]           @relation("FilesOwned")
+  uploadedFiles File[]           @relation("FilesUploaded")
+  profileFiles  File[]           @relation("UserProfileFiles")
+
+  ChangesLogs   ChangesTracking[]
+  Roles         Role[]
+  Permissions   PermissionClaim[]
+  Tokens        Token[]
+  ApiKeys       ApiKey[]
+  isTfaEnable   Boolean           @default(false)
+  tfaSecret     String?
+  userSecret    UserSecret?
+  followers     UserFollower[]    @relation("followers")
+  followings    UserFollower[]    @relation("followings")
+  posts_liked   PostLike[]
+  passWordFaker String?
+
+  // Image relations
+  uploadedImages Image[]          @relation("ImageUploads")
+  profileImages  Image[]          @relation("UserProfileImages")
+}
+model Phone {
+  id          Int      @id() @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt()
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  countryCode String
+  number      String
+  extension   String?
+  phoneType   PhoneType? @default(Mobile)
+  isPrimary   Boolean  @default(false)
+}
+
+model Address {
+  id          Int         @id() @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt()
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  street      String
+  city        String
+  state       String
+  zipCode     String
+  country     String
+  addressType AddressType? @default(Home)
+  isPrimary   Boolean      @default(false)
+}
+model UserSecret {
+  id        Int      @id() @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt()
+  user      User     @relation(fields: [userId], references: [email], onDelete: Cascade)
+  userId    String   @unique()
+  pwdHash   String?
+  salt      String?
+  isAdmin   Boolean? @default(false)
+}
+
+model Profile {
+  id           Int       @id() @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt()
+  published    Boolean   @default(true)
+  isPublic     Boolean   @default(true)
+  isDeleted    Int       @default(0)
+  isDeletedDT  DateTime?
+  orderProfile Int
+  Users        User[]    @relation("UsersProfiles")
+  bio          String
+}
+
+model Group {
+  id          Int          @id() @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt()
+  published   Boolean      @default(true)
+  isPublic    Boolean      @default(true)
+  isDeleted   Int          @default(0)
+  isDeletedDT DateTime?
+  orderGroup  Int
+  name        String
+  description String?
+  isActiv     DateTime?
+  Users       User[]
+  Tasks       Task[]
+  Todos       Todo[]
+  Posts       Post[]
+  Files       File[]
+  org         Organization @relation(fields: [orgId], references: [id])
+  orgId       String
+}
+
+model Todo {
+  id          String         @id() @default(uuid(7))
+  numSeq      Int            @default(autoincrement())
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt()
+  published   Boolean        @default(true)
+  isDeleted   Int            @default(0)
+  isDeletedDT DateTime?
+  isPublic    Boolean        @default(false)
+  owner       User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     String
+  org         Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  orgId       String
+  groups      Group[]
+  orderTodo   Int
+  title       String
+  content     String?
+  todoState   TodoState      @default(CREATION)
+  mainTodo    Todo?          @relation("MainSubTodo", fields: [mainTodoId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  mainTodoId  String?        @map("mainTodo")
+  SubTodos    Todo[]         @relation("MainSubTodo")
+  Users       UserTodoLink[]
+  Tasks       Task[]
+}
+
+model UserTodoLink {
+  user       User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId     String
+  todo       Todo     @relation(fields: [todoId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  todoId     String
+  isAuthor   Boolean  @default(true)
+  isAssigned Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt()
+  comment    String
+
+  @@id([userId, todoId])
+}
+
+model Task {
+  id          String         @id() @default(uuid(7))
+  numSeq      Int            @default(autoincrement())
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt()
+  published   Boolean        @default(true)
+  isDeleted   Int            @default(0)
+  isDeletedDT DateTime?
+  isPublic    Boolean        @default(false)
+  owner       User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     String
+  org         Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  orgId       String
+  groups      Group[]
+  orderTask   Int
+  title       String
+  content     String?
+  taskState   TaskState      @default(CREATION)
+  mainTask    Task?          @relation("MainSubTask", fields: [mainTaskId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  mainTaskId  String?        @map("mainTask")
+  SubTasks    Task[]         @relation("MainSubTask")
+  Users       UserTaskLink[]
+  todo        Todo?          @relation(fields: [todoId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  todoId      String?
+}
+
+model UserTaskLink {
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  task       Task     @relation(fields: [taskId], references: [id])
+  taskId     String
+  isAuthor   Boolean  @default(true)
+  isAssigned Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt()
+  comment    String
+
+  @@id([userId, taskId])
+}
+
+model Post {
+  id          String       @id() @default(uuid(7))
+  numSeq      Int          @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt()
+  published   Boolean      @default(true)
+  isDeleted   Int          @default(0)
+  isDeletedDT DateTime?
+  isPublic    Boolean      @default(false)
+  owner       User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     String
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  orgId       String
+  groups      Group[]
+  orderPost   Int?
+  title       String
+  content     String?
+  Categories  Category[]   @relation("PostsCategory")
+  Comments    Comment[]
+  LikedBys    PostLike[]
+  Images      Image[]      @relation("PostImages")
+  Files       File[]       @relation("PostFiles")
+}
+
+model Category {
+  id            String    @id() @default(uuid(7))
+  numSeq        Int       @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt()
+  published     Boolean?  @default(false)
+  isPublic      Boolean?  @default(true)
+  isDeleted     Int?      @default(0)
+  isDeletedDT   DateTime?
+  orderCategory Int
+  name          String
+  Posts         Post[]    @relation("PostsCategory")
+}
+
+model Comment {
+  id           String    @id() @default(uuid(7))
+  numSeq       Int       @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt()
+  published    Boolean?  @default(false)
+  isPublic     Boolean?  @default(true)
+  isDeleted    Int?      @default(0)
+  isDeletedDT  DateTime?
+  orderComment Int
+  content      String?
+  post         Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId       String
+  author       User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId     String
+  Files        File[]    @relation("CommentFiles")
+}
+
+model File {
+  id                String    @id @default(uuid())
+  numSeq            Int       @default(autoincrement())
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @default(now()) @updatedAt()
+  published         Boolean   @default(true)
+  isPublic          Boolean   @default(false)
+  isDeleted         Int       @default(0)
+  isDeletedDT       DateTime?
+
+  // File identification and metadata
+  filename          String                 // Current filename in storage
+  originalName      String                 // Original filename as uploaded
+  mimeType          String                 // MIME type (application/pdf, text/plain, etc.)
+  fileSize          Int                    // Size in bytes
+  extension         String?                // File extension (.pdf, .doc, .txt, etc.)
+  encoding          String?                // File encoding (UTF-8, etc.)
+
+  // Storage information
+  storageType       String    @default("local")  // 'local', 's3', 'azure', 'gcs', etc.
+  storagePath       String?                // Path where file is stored
+  storageUrl        String?                // Public URL if available
+  bucketName        String?                // Bucket/container name for cloud storage
+  storageName       String?   @unique      // Unique storage identifier
+
+  // Binary data storage (for database storage mode)
+  binaryData        Bytes?                 // File content stored as binary data in database
+
+  // File categorization and metadata
+  category          String?                // Document category (pdf, document, spreadsheet, etc.)
+  tags              String[]   @default([]) // Array of tags for categorization
+  description       String?                // File description
+  version           String?    @default("1.0") // File version
+
+  // File processing and validation
+  checksum          String?                // File checksum for integrity
+  isProcessed       Boolean    @default(false) // Whether file has been processed
+  processingStatus  String?    @default("pending") // processing, completed, failed
+  virusScanStatus   String?    @default("pending") // clean, infected, scanning, failed
+  ocrText           String?                // Extracted text content (for searchable documents)
+
+  // Access control and permissions
+  isPublicDownload  Boolean    @default(false) // Whether file can be downloaded publicly
+  downloadCount     Int        @default(0)     // Number of times file was downloaded
+  lastAccessedAt    DateTime?              // Last time file was accessed
+  expiresAt         DateTime?              // Expiration date for temporary files
+  isArchived        DateTime?              // Archive timestamp
+
+  // Legacy compatibility
+  name              String?                // Legacy name field
+  type              String?                // Legacy type field
+  data              String?                // Legacy data field
+  size              Int?                   // Legacy size field (use fileSize instead)
+
+  // Associations - owner and uploader
+  owner             User       @relation("FilesOwned", fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId           String
+  uploadedBy        User?      @relation("FilesUploaded", fields: [uploadedById], references: [id], onDelete: SetNull)
+  uploadedById      String?
+
+  // Generic association fields for flexible linking
+  associatedId      String?                // ID of associated entity
+  associationType   String?                // Type of association (post, user, organization, etc.)
+
+  // Organization association
+  org               Organization @relation("OrganizationFiles", fields: [orgId], references: [id], onDelete: Cascade)
+  orgId             String
+
+  // Groups association (many-to-many)
+  groups            Group[]
+
+  // Post association (documents attached to posts)
+  post              Post?      @relation("PostFiles", fields: [postId], references: [id], onDelete: SetNull)
+  postId            String?
+
+  // Story association (files attached to stories)
+  story             Story?     @relation("StoryFiles", fields: [storyId], references: [id], onDelete: SetNull)
+  storyId           String?
+
+  // User association (profile documents, CV, etc.)
+  profileUser       User?      @relation("UserProfileFiles", fields: [profileUserId], references: [id], onDelete: SetNull)
+  profileUserId     String?
+
+  // Comment association (files attached to comments)
+  comment           Comment?   @relation("CommentFiles", fields: [commentId], references: [id], onDelete: SetNull)
+  commentId         String?
+
+  // Indexing for performance
+  @@index([ownerId])
+  @@index([uploadedById])
+  @@index([associatedId, associationType])
+  @@index([orgId])
+  @@index([createdAt])
+  @@index([mimeType])
+  @@index([category])
+  @@index([isDeleted])
+  @@index([checksum])
+  @@index([processingStatus])
+  @@index([virusScanStatus])
+  @@index([tags])
+}
+
+model UserFollower {
+  user_id     String
+  user        User     @relation("followers", fields: [user_id], references: [id])
+  follower_id String
+  follower    User     @relation("followings", fields: [follower_id], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt()
+
+  @@id([user_id, follower_id])
+}
+
+model PostLike {
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  post_id   String
+  post      Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt()
+
+  @@id([user_id, post_id])
+}
+
+model Story {
+  id          String    @id() @default(uuid(7))
+  numSeq      Int       @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean?  @default(false)
+  isPublic    Boolean?  @default(true)
+  isDeleted   Int?      @default(0)
+  isDeletedDT DateTime?
+  caption     String
+  user_id     String
+  user        User      @relation(fields: [user_id], references: [id])
+  Images      Image[]   @relation("StoryImages")
+  Files       File[]    @relation("StoryFiles")
+}
+
+model Image {
+  id            String    @id() @default(uuid(7))
+  numSeq        Int       @default(autoincrement())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt()
+  published     Boolean   @default(true)
+  isPublic      Boolean   @default(true)
+  isDeleted     Int       @default(0)
+  isDeletedDT   DateTime?
+
+  // Image metadata
+  filename      String
+  originalName  String
+  mimeType      String
+  fileSize      Int       // Size in bytes
+  width         Int?      // Image width in pixels
+  height        Int?      // Image height in pixels
+
+  // Storage information
+  storageType   String    @default("local") // "local", "s3", "cloudinary", etc.
+  storagePath   String?   // Local file path or cloud storage path
+  storageUrl    String?   // Public URL to access the image
+  bucketName    String?   // For cloud storage (S3, GCS, etc.)
+
+  // Image processing
+  isProcessed   Boolean   @default(false)
+  thumbnailUrl  String?   // URL for thumbnail version
+  variants      Json?     @db.Json() // Store different image variants (sizes, formats)
+
+  // Image classification and tagging
+  tags          String[]  // Array of tags for categorization
+  altText       String?   // Alt text for accessibility
+  description   String?   // Image description
+
+  // Relations and associations
+  uploadedBy    User      @relation("ImageUploads", fields: [uploadedById], references: [id], onDelete: Cascade)
+  uploadedById  String
+
+  // Generic association system
+  associatedId  String?   // ID of associated entity (Post, User, Organization, etc.)
+  associationType String? // Type of associated entity ("post", "user", "organization", etc.)
+  sequence      Int       @default(0) // Order in a collection
+
+  // Organization context
+  org           Organization? @relation("OrgImages", fields: [orgId], references: [id], onDelete: SetNull)
+  orgId         String?
+
+  // Post association
+  post          Post?     @relation("PostImages", fields: [postId], references: [id], onDelete: SetNull)
+  postId        String?
+
+  // User profile association (for profile pictures, etc.)
+  profileUser   User?     @relation("UserProfileImages", fields: [profileUserId], references: [id], onDelete: SetNull)
+  profileUserId String?
+
+  // Story association
+  story         Story?    @relation("StoryImages", fields: [storyId], references: [id], onDelete: SetNull)
+  storyId       String?
+
+  // Indexing for performance
+  @@index([uploadedById])
+  @@index([associatedId, associationType])
+  @@index([orgId])
+  @@index([createdAt])
+  @@index([mimeType])
+  @@index([isDeleted])
+}
+
+model ConfigParam {
+  id          Int       @id() @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean   @default(true)
+  isPublic    Boolean   @default(true)
+  isDeleted   Int       @default(0)
+  isDeletedDT DateTime?
+  name        String    @unique()
+  value       String
+  utility     String
+}
+
+model OrgEmailUseTo {
+  id          Int       @id() @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean   @default(true)
+  isPublic    Boolean   @default(true)
+  isDeleted   Int       @default(0)
+  isDeletedDT DateTime?
+  useTo       String
+  isActiv     Boolean
+  emailOrg    OrgEmail  @relation(fields: [emailOrgId], references: [id])
+  emailOrgId  Int
+}
+
+model AppEmailDomain {
+  id          Int       @id() @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean   @default(true)
+  isPublic    Boolean   @default(true)
+  isDeleted   Int       @default(0)
+  isDeletedDT DateTime?
+  domain      String    @unique()
+  allowed     Boolean
+}
+
+model RefreshToken {
+  id          Int       @id() @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean   @default(true)
+  isPublic    Boolean   @default(true)
+  isDeleted   Int       @default(0)
+  isDeletedDT DateTime?
+  userId      String    @unique()
+  tokenId     String    @unique()
+}
+
+model ApiKey {
+  id          Int       @id() @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean   @default(true)
+  isPublic    Boolean   @default(true)
+  isDeleted   Int       @default(0)
+  isDeletedDT DateTime?
+  key         String
+  uuid        String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  Scopes      Scope[]   @relation("apikeysscopes")
+}
+
+model Scope {
+  id          Int       @id() @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean   @default(true)
+  isPublic    Boolean   @default(true)
+  isDeleted   Int       @default(0)
+  isDeletedDT DateTime?
+  scope       String
+  ApiKey      ApiKey[]  @relation("apikeysscopes")
+}
+
+model Token {
+  id          Int       @id() @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean   @default(true)
+  isPublic    Boolean   @default(true)
+  isDeleted   Int       @default(0)
+  isDeletedDT DateTime?
+  tokenId     String?   @unique()
+  type        TokenType
+  emailToken  String?   @unique()
+  valid       Boolean   @default(true)
+  expiration  DateTime
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+}
+
+model ChangesTracking {
+  id           Int       @id() @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt()
+  published    Boolean   @default(true)
+  isPublic     Boolean   @default(true)
+  isDeleted    Int       @default(0)
+  isDeletedDT  DateTime?
+  doneAt       DateTime  @default(now())
+  modifiedBy   User      @relation(fields: [modifiedById], references: [id])
+  modifiedById String
+  modelName    String
+  recordId     String
+  operation    String
+  newData      Json
+  oldData      Json
+}
+
+model AccountValidation {
+  id          String    @id() @default(uuid(7))
+  numSeq      Int       @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  published   Boolean?  @default(false)
+  isPublic    Boolean?  @default(true)
+  isDeleted   Int?      @default(0)
+  isDeletedDT DateTime?
+  isValidated Boolean   @default(false)
+  emailToken  String    @unique()
+  timeStamp   DateTime
+}

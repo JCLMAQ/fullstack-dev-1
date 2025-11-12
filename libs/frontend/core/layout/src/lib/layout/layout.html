@@ -1,0 +1,18 @@
+<lib-header />
+<mat-sidenav-container (backdropClick)="backDrop()">
+  <mat-sidenav
+    (keydown.escape)="backDrop()"
+    [mode]="responsiveService.modeSideNav()"
+    [opened]="responsiveService.sideNavOpen()"
+    [style.width]="responsiveService.sideNavWidth()"
+  >
+    <lib-custom-sidenav />
+  </mat-sidenav>
+  <mat-sidenav-content
+    class="content"
+    [style.margin-left]="responsiveService.styleMarginLeft()"
+  >
+    <!-- <app-messages /> -->
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

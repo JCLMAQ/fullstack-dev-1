@@ -1,0 +1,9 @@
+{
+  "name": "stories",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/data-access/stories/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project stories --web",
+  "targets": {}
+}

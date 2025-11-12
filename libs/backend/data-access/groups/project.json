@@ -1,0 +1,9 @@
+{
+  "name": "groups",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/data-access/groups/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project groups --web",
+  "targets": {}
+}

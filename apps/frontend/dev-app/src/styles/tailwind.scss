@@ -1,0 +1,18 @@
+
+@use "tailwindcss";
+
+@theme {
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@variant dark (.dark &);
+
+//Material Tailwind Fixes
+.mdc-notched-outline__notch {
+  border-style: none;
+}
+
+.mat-mdc-icon-button {
+  line-height: normal;
+}

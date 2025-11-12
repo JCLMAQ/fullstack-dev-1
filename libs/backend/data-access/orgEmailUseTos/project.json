@@ -1,0 +1,9 @@
+{
+  "name": "orgEmailUseTos",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/data-access/orgEmailUseTos/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project orgEmailUseTos --web",
+  "targets": {}
+}

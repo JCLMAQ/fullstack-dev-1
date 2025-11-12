@@ -1,0 +1,146 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.mjs",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/src/test-setup.[jt]s",
+      "!{projectRoot}/test-setup.[jt]s"
+    ],
+    "sharedGlobals": []
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/js/typescript",
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        },
+        "build": {
+          "targetName": "build",
+          "configName": "tsconfig.lib.json",
+          "buildDepsName": "build-deps",
+          "watchDepsName": "watch-deps"
+        }
+      },
+      "exclude": [
+        "libs/backend/prisma-client/*",
+        "libs/backend/data-access/files/*",
+        "libs/backend/utilities/db-config/*",
+        "libs/backend/utilities/mails/*",
+        "libs/backend/utilities/time-util/*",
+        "libs/backend/utilities/changestracking/*",
+        "libs/backend/utilities/exeption-filter/*",
+        "libs/backend/utilities/files-utilities/*",
+        "libs/backend/iam/*"
+      ]
+    },
+    {
+      "plugin": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps",
+        "serveStaticTargetName": "serve-static"
+      }
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      },
+      "exclude": [
+        "apps/backend/nestjs-app-e2e/**/*",
+        "apps/backend/nestjs-app-e2e/**/*",
+        "apps/backend/nestjs-bis-e2e/**/*",
+        "apps/backend/nest-app-e2e/**/*"
+      ]
+    },
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e"
+      }
+    },
+    {
+      "plugin": "@nx/js/typescript",
+      "include": [
+        "libs/backend/prisma-client/*",
+        "libs/backend/data-access/users/*",
+        "libs/backend/data-access/posts/*",
+        "libs/backend/data-access/comments/*",
+        "libs/backend/data-access/organizations/*",
+        "libs/backend/data-access/orgEmails/*",
+        "libs/backend/data-access/orgDomains/*",
+        "libs/backend/data-access/phones/*",
+        "libs/backend/data-access/address/*",
+        "libs/backend/data-access/profiles/*",
+        "libs/backend/data-access/groups/*",
+        "libs/backend/data-access/todos/*",
+        "libs/backend/data-access/categories/*",
+        "libs/backend/data-access/userFollowers/*",
+        "libs/backend/data-access/postLikes/*",
+        "libs/backend/data-access/stories/*",
+        "libs/backend/data-access/configParams/*",
+        "libs/backend/data-access/orgEmailUseTos/*",
+        "libs/backend/data-access/appEmailDomains/*",
+        "libs/backend/data-access/tasks/*",
+        "libs/backend/data-access/files/*",
+        "libs/backend/utilities/db-config/*",
+        "libs/backend/utilities/mails/*",
+        "libs/backend/utilities/time-util/*",
+        "libs/backend/utilities/changestracking/*",
+        "libs/backend/utilities/exeption-filter/*",
+        "libs/backend/utilities/files-utilities/*",
+        "libs/backend/iam/*"
+      ],
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        }
+      }
+    }
+  ],
+  "targetDefaults": {
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "@angular/build:application": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
+    },
+    "@nx/vite:test": {
+      "cache": true,
+      "inputs": ["default", "^production"]
+    }
+  },
+  "generators": {
+    "@nx/angular:application": {
+      "e2eTestRunner": "playwright",
+      "linter": "eslint",
+      "style": "scss",
+      "unitTestRunner": "vitest"
+    },
+    "@nx/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nx/angular:component": {
+      "style": "scss"
+    }
+  }
+}

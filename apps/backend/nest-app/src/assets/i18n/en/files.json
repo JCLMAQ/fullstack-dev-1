@@ -1,0 +1,8 @@
+{
+    "FILE_EXIST_NO": "The file your are looking for, does not exist",
+    "FILE_NOT_DELETED": "Deletion of the file failed !!! ",
+    "FILE_NOT_RENAMED": "File has not been renamed !.",
+    "FILE_PARSE_ERROR": "Error parsing the path ! ",
+    "FILE_NOT_COPIED": "File has not been copied ! ",
+    "FILE_BAD_DIRECTORY": "Bad directory or Directory not created !"
+  }

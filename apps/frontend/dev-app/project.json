@@ -1,0 +1,104 @@
+{
+  "name": "dev-app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/frontend/dev-app/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/frontend/dev-app",
+        "browser": "apps/frontend/dev-app/src/main.ts",
+        "polyfills": [],
+        "tsConfig": "apps/frontend/dev-app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/frontend/dev-app/public"
+          }
+        ],
+        "styles": [
+          "apps/frontend/dev-app/src/styles.scss",
+          "node_modules/material-icons/iconfont/material-icons.css",
+          "node_modules/material-symbols/index.scss",
+          "node_modules/roboto-fontface/css/roboto/roboto-fontface.css",
+          "node_modules/flag-icons/css/flag-icons.min.css"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "outputHashing": "media"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "dev-app:build:production"
+        },
+        "development": {
+          "buildTarget": "dev-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4001
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular/build:extract-i18n",
+      "options": {
+        "buildTarget": "dev-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
+      "options": {
+        "reportsDirectory": "../../../coverage/apps/frontend/dev-app"
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "dev-app:build",
+        "port": 4001,
+        "staticFilePath": "dist/apps/frontend/dev-app/browser",
+        "spa": true
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "exeption-filter",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/utilities/exeption-filter/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project exeption-filter --web",
+  "targets": {}
+}

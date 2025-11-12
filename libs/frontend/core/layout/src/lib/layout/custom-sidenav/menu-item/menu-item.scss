@@ -1,0 +1,63 @@
+:host * {
+  transition-property: margin-inline-start, opacity, height;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+}
+
+.menu-item {
+  border-left: 5px solid;
+  border-left-color: rgba(0, 0, 0, 0);
+  // mat-menu {
+  //   // --mat-sys-border-radius: 0px;
+  // }
+}
+
+//Active style - primary color css variable will be set in theming section
+// .selected-menu-item {
+//   // border-left-color: var(--mat-sys-primary);
+//   border-left-color: #1976d2
+//       mat-icon {
+//         color: var(--mat-sys-primary);
+//       };
+//       mat-menu {
+//         color: var(--mat-sys-primary);
+//       }
+//   background: rgba(0, 0, 0, 0.05);
+// }
+.selected-menu-item {
+  border-left-color: var(--mat-sys-primary);
+  background: rgba(0, 0, 0, 0.05);
+
+  mat-icon {
+    color: var(--mat-sys-primary);
+  }
+
+  mat-menu {
+    color: var(--mat-sys-primary);
+  }
+}
+
+.sub-menu {
+  display: grid;
+}
+
+.sub-menu > div {
+  overflow: hidden;
+}
+
+.expand-anim {
+  animation: expand-in 500ms ease-in-out;
+}
+.contract-anim {
+  animation: expand-in 500ms ease-in-out reverse;
+}
+@keyframes expand-in {
+  from {
+    opacity: 0;
+    grid-template-rows: 0fr;
+  }
+  to {
+    opacity: 1;
+    grid-template-rows: 1fr;
+  }
+}

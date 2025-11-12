@@ -1,0 +1,9 @@
+{
+  "name": "userFollowers",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/data-access/userFollowers/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project userFollowers --web",
+  "targets": {}
+}

@@ -1,0 +1,130 @@
+<mat-toolbar class="mat-elevation-z3 relative z-10">
+  <button mat-icon-button (click)="toggleMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <h1 class="flex-1">{{"SITETITLE" | translate }}</h1>
+  <!-- <div class="flex-stretch"></div> -->
+  <div class="flex-right"></div>
+
+  <!-- Dark mode button -->
+
+  <!-- Light-Dark Theme Toggle Button -->
+  <button
+    mat-icon-button
+    matTooltip="themeService.selectedLightDarkTheme()?.name"
+    (click)="themeService.switchLightDarkTheme()"
+  >
+    <mat-icon>{{ themeService.selectedLightDarkTheme()?.icon }}</mat-icon>
+  </button>
+
+  <!-- Color Theme Menu -->
+  <button mat-icon-button [matMenuTriggerFor]="themeColorMenu">
+    <mat-icon>format_color_fill</mat-icon>
+  </button>
+  <mat-menu #themeColorMenu="matMenu">
+    @for (theme of themeService.getColorThemes(); track theme.id) {
+    <button mat-menu-item (click)="themeService.setColorTheme(theme.id)">
+      <div class="theme-menu-item">
+        <div
+          class="color-preview"
+          [style.background-color]="theme.primary"
+        ></div>
+        <span>{{ theme.displayName }}</span>
+      </div>
+    </button>
+    }
+  </mat-menu>
+
+  <!-- <app-flag [of]="dictionaryStore.selectedLanguage()"
+            matTooltip="Change Language"
+            (click)="dictionaryStore.changeLanguage()"
+            /> -->
+
+  <!-- Menu language selectection -->
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menulanguage"
+    matTooltip="Change Language"
+    aria-label="Change Language Menu"
+  >
+    <!-- <mat-icon>language</mat-icon> -->
+    @if (currentLang() === 'en') {
+    <h3><span class="fi fi-gb"></span></h3>
+    } @else {
+    <h3><span class="fi fi-{{ currentLang() }}"></span></h3>
+    }
+  </button>
+  <mat-menu #menulanguage="matMenu">
+    @for (lang of this.ngxtranslateService.getLangs(); track lang) { @if (lang
+    === 'en') {
+    <button mat-menu-item [value]="lang" (click)="setLanguage(lang)">
+      <h3><span class="fi fi-gb"></span> - {{ lang.toUpperCase() }}</h3>
+    </button>
+    } @else {
+    <button mat-menu-item [value]="lang" (click)="setLanguage(lang)">
+      <h3><span class="fi fi-{{ lang }}"></span> - {{ lang.toUpperCase() }}</h3>
+    </button>
+    } }
+  </mat-menu>
+
+<!-- Login Menu -->
+      @if (appStore.user(); as user) {
+        <button mat-icon-button [mat-menu-trigger-for]="profileMenu">
+          <img
+            [src]="user?.photoUrl ?? 'person-placeholder.png'"
+            alt="User profile picture"
+            class="w-[40px] h-[40px] object-cover rounded-full"
+          />
+        </button>
+        <mat-menu #profileMenu="matMenu">
+          <button mat-menu-item (click)="appStore['logout']()">
+            <mat-icon>logout</mat-icon>
+            Log out
+          </button>
+        </mat-menu>
+      } @else {
+        <button mat-icon-button (click)="login()">
+          <mat-icon>login</mat-icon>
+        </button>
+      }
+
+      <!-- Pages selection menu -->
+      <button class="menu-button" mat-icon-button [matMenuTriggerFor]="submenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #submenu="matMenu">
+
+        <button mat-menu-item (click)="navigate('picto')">
+          <mat-icon>picture_in_picture</mat-icon>
+          <span>{{"ToolBarMenu.Pictos" | translate}}</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="navigate('carousselpicture')">
+            <mat-icon>camera</mat-icon>
+            <span>{{"ToolBarMenu.Carrousel" | translate}}</span>
+          </button>
+          <mat-divider></mat-divider>
+        <button mat-menu-item (click)="navigate('picture')">
+            <mat-icon>camera_alt</mat-icon>
+            <span>{{"ToolBarMenu.Images" | translate}}</span>
+          </button>
+          <mat-divider></mat-divider>
+        <button mat-menu-item (click)="navigate('file')">
+            <mat-icon>task</mat-icon>
+            <span>{{"ToolBarMenu.Files" | translate}}</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="navigate('users')">
+              <mat-icon>supervised_user_circle</mat-icon>
+              <span>{{"ToolBarMenu.Users" | translate}}</span>
+            </button>
+            <mat-divider></mat-divider>
+          <button mat-menu-item (click)="navigate('choice')">
+            <mat-icon>tune</mat-icon>
+            <span>{{"ToolBarMenu.Choices" | translate}}</span>
+          </button>
+      </mat-menu>
+
+</mat-toolbar>

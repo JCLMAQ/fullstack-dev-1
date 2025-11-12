@@ -1,0 +1,72 @@
+
+services:
+    postgres:
+        container_name: postgres
+        image: postgres:latest
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        volumes:
+            - postgres:/var/lib/postgresql
+        # Uncomment the next two lines to connect to your your database from outside the Docker environment, e.g. using a database GUI like Postico
+        ports:
+            - "${DATABASE_PORT}:5432"
+            # - "5450:5432"
+        # network_mode: "host"
+        networks:
+          - fullstack-dev-1-network-3001
+            # postgres:
+        #         ipv4_address: 172.16.238.10
+        restart: unless-stopped
+
+    pgadmin:
+        container_name: pgadmin
+        image: dpage/pgadmin4:latest
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+        volumes:
+            - pgadmin:/root/.pgadmin
+        ports:
+            - "${PGADMIN_PORT}:80"
+            # - "5050:80"
+        networks:
+            - fullstack-dev-1-network-3001
+        restart: unless-stopped
+
+    # nest-api:
+    #     container_name: nest-api
+    #     build:
+    #       context: .
+    #       dockerfile: Dockerfile
+    #       args:
+    #         - POSTGRESQL_URL=${POSTGRESQL_URL}
+    #     ports:
+    #       - '3000:3000'
+    #     depends_on:
+    #       - postgres
+    #     env_file:
+    #       - ./.env
+
+networks:
+  fullstack-dev-1-network-3001:
+    # postgres:
+
+volumes:
+    postgres:
+        name: basedev-db-postgres-3001
+    pgadmin:
+        name: pgadmin-db-3001
+
+# container_name:  this is what we will call our container- for simplicity have it match the service name.
+# image if we are downloading an image from docker hub, we will put it here.
+#   build if we are not downloading from docker hub we will build our image and this block gives instructions about which
+#   folder is the working directory for the build and what the name of our Dockerfile is (which we will create below).
+# environment Any environmental variables go here.
+# restart Ensures that we restart our container if it dies.
+# links and depends_on sets up a connection between the two containers and specifies that a particular container
+# should wait on a different container before starting.
+# volumes specifies which kind of volumes the containers should create.
+# One that has a : in it means that we are creating a link between a folder on our computer and a path in our container.
+# The kind without a colon just means that it will save that folder during the build step so we can use it when the container runs. This is important for node_modules for example because we want to make sure that our docker container keeps that folder during the npm install step of the build phase because that folder is needed to run our application

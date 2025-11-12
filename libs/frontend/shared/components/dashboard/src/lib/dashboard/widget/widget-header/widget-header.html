@@ -1,0 +1,13 @@
+<div
+  class="flex flex-row justify-between items-center cursor-move mb-3"
+  [style.--mdc-icon-button-icon-color]="data().color ?? 'inherit'"
+>
+  <h3 class="text-xl">{{ data().label }}</h3>
+  @if (store.settings.mode() === 'edit') {
+  <div class="absolute top-[20px] right-[20px]">
+    <button mat-icon-button (click)="showOptions.set(true)">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </div>
+  }
+</div>

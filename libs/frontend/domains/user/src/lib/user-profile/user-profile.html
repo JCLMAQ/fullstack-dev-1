@@ -1,0 +1,175 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Welcome to a not-so-simple form!</h1>
+        <p class="text-gray-600 dark:text-gray-400">
+          Signal Form with Custom validations, Cross-field validations, and Conditional fields
+        </p>
+      </div>
+
+      <div class="flex gap-6 justify-center">
+        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 w-[600px]">
+          <form class="space-y-6">
+            <!-- Basic Information Section -->
+            <div class="border-b border-gray-200 dark:border-gray-600 pb-6">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Basic Information</h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- First Name -->
+                <div>
+                  <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    id="firstName"
+                    type="text"
+                    [control]="personalForm.firstName"
+                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    placeholder="Enter your first name"
+                  />
+                  <lib-field-error [field]="personalForm.firstName()" />
+                </div>
+
+                <!-- Last Name -->
+                <div>
+                  <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    [control]="personalForm.lastName"
+                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    placeholder="Enter your last name"
+                  />
+                  <lib-field-error [field]="personalForm.lastName()" />
+                </div>
+              </div>
+
+              <!-- Date of Birth with Custom Age Validation -->
+              <div class="mt-4">
+                <label for="dateOfBirth" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Date of Birth *
+                </label>
+                <input
+                  id="dateOfBirth"
+                  type="date"
+                  [control]="personalForm.dateOfBirth"
+                  class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                />
+                <lib-field-error [field]="personalForm.dateOfBirth()" />
+              </div>
+            </div>
+
+            <!-- Password Section with Custom Validation -->
+            <div class="border-b border-gray-200 dark:border-gray-600 pb-6">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Password Security</h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Password with Custom Strength Validation -->
+                <div>
+                  <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Password *
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    [control]="personalForm.password"
+                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    placeholder="Enter a strong password"
+                  />
+                  <lib-field-error [field]="personalForm.password()" />
+                </div>
+
+                <!-- Confirm Password with Cross-field Validation -->
+                <div>
+                  <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Confirm Password *
+                  </label>
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    [control]="personalForm.confirmPassword"
+                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    placeholder="Confirm your password"
+                  />
+                  <lib-field-error [field]="personalForm.confirmPassword()" />
+                </div>
+
+                <lib-field-error [field]="personalForm()"></lib-field-error>
+              </div>
+            </div>
+
+            <!-- Conditional Fields Section -->
+            <div class="border-b border-gray-200 dark:border-gray-600 pb-6">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Additional Information</h2>
+
+              <!-- Emergency Contact (Conditional Field) -->
+              <div class="mb-4">
+                <div class="flex items-center mb-3">
+                  <input
+                    id="hasEmergencyContact"
+                    type="checkbox"
+                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    [control]="personalForm.hasEmergencyContact"
+                  />
+                  <label for="hasEmergencyContact" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                    I have an emergency contact
+                  </label>
+                </div>
+
+                <div class="ml-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      for="emergencyContactName"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Emergency Contact Name
+                    </label>
+                    <input
+                      id="emergencyContactName"
+                      type="text"
+                      [control]="personalForm.emergencyContactName"
+                      class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      placeholder="Enter emergency contact name"
+                    />
+                    <lib-field-error [field]="personalForm.emergencyContactName()" />
+                  </div>
+
+                  <div>
+                    <label
+                      for="emergencyContactPhone"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Emergency Contact Phone
+                    </label>
+                    <input
+                      id="emergencyContactPhone"
+                      type="tel"
+                      [control]="personalForm.emergencyContactPhone"
+                      class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      placeholder="Enter emergency contact phone"
+                    />
+                    <lib-field-error [field]="personalForm.emergencyContactPhone()" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+              <button
+                type="submit"
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              >
+                Submit Personal Details
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-md">
+          <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Form Data:</h3>
+          <pre class="text-xs text-gray-600 dark:text-gray-400 mb-2">{{ personalForm().value() | json }}</pre>
+          <pre class="text-xs text-gray-600 dark:text-gray-400">{{ personalForm().errorSummary() | json }}</pre>
+        </div>
+      </div>
+    </div>

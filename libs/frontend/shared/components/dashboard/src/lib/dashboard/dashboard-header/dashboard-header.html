@@ -1,0 +1,36 @@
+<div
+  class="flex flex-row items-center justify-between mb-4 position-relative gap-2"
+>
+  <h2 class="text-2xl">Channel Dashboard</h2>
+  <div class="flex-1"></div>
+  <mat-button-toggle-group
+    [value]="store.settings.mode()"
+    (change)="store.setMode($event.value)"
+    [hideSingleSelectionIndicator]="true"
+  >
+    <mat-button-toggle value="view"
+      ><mat-icon>visibility</mat-icon></mat-button-toggle
+    >
+    <mat-button-toggle value="edit"
+      ><mat-icon>edit</mat-icon></mat-button-toggle
+    >
+  </mat-button-toggle-group>
+  <div class="relative">
+    @if (widgetsOpen()) {
+    <lib-widgets-panel
+      cdkDropList
+      cdkDropListOrientation="vertical"
+      (cdkDropListDropped)="widgetDroppedInPanel($event)"
+      class="mat-elevation-z8"
+      cdkDrag
+    />
+    }
+    <button mat-flat-button (click)="widgetsOpen.set(!widgetsOpen())">
+      @if(widgetsOpen()) {
+      <mat-icon>close</mat-icon>
+      } @else {
+      <mat-icon>add_circle</mat-icon>
+      } Widgets
+    </button>
+  </div>
+</div>

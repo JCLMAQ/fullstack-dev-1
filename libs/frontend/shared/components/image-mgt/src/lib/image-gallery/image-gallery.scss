@@ -1,0 +1,59 @@
+// Image Gallery Component Styles - Inspired by user-profile design
+.image-gallery {
+  // Custom styles for image cards
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  // Responsive grid adjustments
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  // Custom hover effects
+  .image-card {
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // Selected state
+  .selected {
+    box-shadow: 0 0 0 2px #3b82f6;
+  }
+
+  // Button hover states
+  .action-button {
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+  }
+}
+
+// Styles pour le menu d'actions
+.delete-action {
+  color: var(--mat-app-warn) !important;
+
+  mat-icon {
+    color: var(--mat-app-warn) !important;
+  }
+}

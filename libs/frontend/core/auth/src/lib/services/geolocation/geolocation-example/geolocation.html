@@ -1,0 +1,14 @@
+<p>Geolocation works!</p>
+
+<!-- Usage dans template réactif -->
+@if (geoService.loading()) {
+  <p>Getting your location...</p>
+}
+
+@if (geoService.error()) {
+  <p>Error: {{ geoService.error() }}</p>
+}
+
+@if (geoService.coordinates(); as coords) {
+  <p>Lat: {{ coords.latitude }}, Lng: {{ coords.longitude }}</p>
+}

@@ -1,0 +1,9 @@
+{
+  "name": "files-utilities",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/utilities/files-utilities/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project files-utilities --web",
+  "targets": {}
+}

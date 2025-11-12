@@ -1,0 +1,369 @@
+// File Management Component Styles - Pure Angular Material Design
+
+// Container Styles
+.file-management-container {
+  padding: 24px;
+  min-height: 100vh;
+  background-color: var(--mat-app-background-color, #fafafa);
+
+  .header-card {
+    margin-bottom: 24px;
+    text-align: center;
+
+    mat-card-header {
+      justify-content: center;
+
+      mat-card-title {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .main-content {
+    display: flex;
+    justify-content: center;
+
+    .main-card {
+      width: 100%;
+      max-width: 1200px;
+      padding: 24px;
+    }
+  }
+}
+
+// Filters Section
+.filters-card {
+  margin-bottom: 24px;
+
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+
+    .full-width {
+      width: 100%;
+    }
+  }
+
+  .actions-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 24px;
+
+    button {
+      min-width: 120px;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+
+    mat-button-toggle-group {
+      margin-left: auto;
+
+      mat-button-toggle {
+        min-width: 48px;
+      }
+    }
+  }
+}
+
+// Stats Section
+.stats-card {
+  margin-bottom: 24px;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    text-align: center;
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+
+      .text-primary {
+        color: var(--mat-primary-500);
+      }
+
+      .text-muted {
+        color: var(--mat-text-secondary-on-background);
+      }
+    }
+  }
+}
+
+// Files Gallery
+.files-gallery-card {
+  margin-bottom: 24px;
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    gap: 16px;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    text-align: center;
+    color: var(--mat-text-secondary-on-background);
+
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    h3 {
+      margin: 0 0 8px 0;
+      font-weight: 400;
+    }
+
+    p {
+      margin: 0;
+      opacity: 0.7;
+    }
+  }
+
+  .files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+
+    &.list-view {
+      grid-template-columns: 1fr;
+
+      .file-card {
+        .file-details {
+          display: flex;
+          flex-direction: row;
+          gap: 24px;
+
+          .detail-row {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+
+    .file-card {
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+      }
+
+      &.selected {
+        border: 2px solid var(--mat-primary-500);
+        background-color: var(--mat-primary-50);
+      }
+
+      mat-card-header {
+        .file-name {
+          font-size: 14px;
+          font-weight: 500;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .card-actions {
+          margin-left: auto;
+        }
+      }
+
+      .file-details {
+        margin-top: 8px;
+
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 4px;
+          font-size: 12px;
+
+          .label {
+            font-weight: 500;
+            color: var(--mat-text-secondary-on-background);
+          }
+
+          .value {
+            color: var(--mat-text-primary-on-background);
+            text-align: right;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Upload Section
+.upload-card {
+  .upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    border: 2px dashed var(--mat-divider-color);
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.2s ease;
+
+    &:hover, &.drag-over {
+      border-color: var(--mat-primary-500);
+      background-color: var(--mat-primary-50);
+    }
+
+    .upload-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      color: var(--mat-text-secondary-on-background);
+    }
+
+    h3 {
+      margin: 0 0 8px 0;
+      font-weight: 400;
+    }
+
+    p {
+      margin: 0 0 16px 0;
+      color: var(--mat-text-secondary-on-background);
+    }
+
+    .hidden {
+      display: none;
+    }
+  }
+}
+
+// Gallery Section
+.gallery-paginator {
+  margin-top: 24px;
+
+  ::ng-deep .mat-mdc-paginator {
+    background: transparent;
+  }
+}
+
+// Admin Section
+.admin-content {
+  padding-top: 24px;
+
+  .maintenance-card {
+    .admin-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+
+      button {
+        min-height: 56px;
+
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+// Tab Content
+.management-tabs {
+  ::ng-deep {
+    .mat-mdc-tab-body-content {
+      overflow: visible;
+    }
+
+    .mat-mdc-tab-body-wrapper {
+      flex: 1;
+    }
+  }
+}
+
+// Menu Actions
+.warn-action {
+  color: var(--mat-warn-500) !important;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .file-management-container {
+    padding: 16px;
+
+    .main-card {
+      padding: 16px;
+    }
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .actions-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+
+    mat-button-toggle-group {
+      margin-left: 0;
+      align-self: center;
+    }
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .files-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-actions {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+// Material Theme Integration
+:host {
+  display: block;
+
+  // Ensure proper spacing with Material components
+  .mat-mdc-card + .mat-mdc-card {
+    margin-top: 24px;
+  }
+
+  // Custom cursor for interactive icons
+  .cursor-pointer {
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  // Ensure form fields are full width when needed
+  .full-width .mat-mdc-form-field {
+    width: 100%;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "USER_EMAIL_NOT_FOUND": "Email (user) not found",
+  "USER_DELETED": "User does not exist - anymore - or has been deleted",
+  "USER_NOT_FOUND": "User not found", 
+  "USER_ADDED_PRODUCT": "{0.username} added {1.productName} to cart",
+  "USER_HELLO_MESSAGE": "Hello {username}",
+  "USER_GOODBYE_MESSAGE": "Goodbye {username}",
+  "SETUP": {
+    "WELCOME": "Welcome {0.username}",
+    "GOODBYE": "Goodbye {0.username}"
+  },
+  "ARRAY": ["ONE", "TWO", "THREE"]
+  }

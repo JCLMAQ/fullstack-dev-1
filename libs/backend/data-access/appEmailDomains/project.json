@@ -1,0 +1,9 @@
+{
+  "name": "appEmailDomains",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/data-access/appEmailDomains/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project appEmailDomains --web",
+  "targets": {}
+}

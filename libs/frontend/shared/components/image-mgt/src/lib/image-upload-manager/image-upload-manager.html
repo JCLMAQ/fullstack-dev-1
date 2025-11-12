@@ -1,0 +1,312 @@
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+      {{ 'IMAGE_UPLOAD.TITLE' | translate }}
+    </h1>
+    @if (multiple()) {
+      <p class="text-gray-600 dark:text-gray-400">
+        {{ 'IMAGE_UPLOAD.MULTIPLE_DESCRIPTION' | translate }}
+      </p>
+    }
+  </div>
+
+  <div class="flex justify-center">
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 w-full max-w-4xl">
+
+      <!-- Zone de drop -->
+      <div class="border-b border-gray-200 dark:border-gray-600 pb-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+          {{ 'IMAGE_UPLOAD.SELECT_FILES' | translate }}
+        </h2>
+
+        <div
+          class="drop-zone"
+          [class.dragover]="isDragOver()"
+          [class.has-files]="selectedFiles().length > 0"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onFileDrop($event)"
+          (click)="openFileDialog()"
+          (keyup.enter)="openFileDialog()"
+          (keyup.space)="openFileDialog()"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="'IMAGE_UPLOAD.DROP_ZONE_TITLE' | translate"
+        >
+          <input
+            type="file"
+            #fileInput
+            [accept]="acceptedTypes"
+            [multiple]="multiple()"
+            (change)="onFileSelect($event)"
+            style="display: none;"
+          >
+
+          @if (selectedFiles().length === 0) {
+            <div class="drop-content">
+              <mat-icon class="text-6xl text-gray-400 dark:text-gray-500 mb-4">cloud_upload</mat-icon>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ 'IMAGE_UPLOAD.DROP_ZONE_TITLE' | translate }}</h3>
+              <p class="text-gray-600 dark:text-gray-400 mb-4">{{ 'IMAGE_UPLOAD.DROP_ZONE_DESCRIPTION' | translate }}</p>
+              <button
+                type="button"
+                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+              >
+                {{ 'IMAGE_UPLOAD.BROWSE_FILES' | translate }}
+              </button>
+            </div>
+          }
+
+          <!-- Aperçu des fichiers sélectionnés -->
+          @if (selectedFiles().length > 0) {
+            <div class="files-preview">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @for (fileData of selectedFiles(); track trackByFileName) {
+                  <div class="file-preview-card bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow duration-200">
+                    <div class="file-preview mb-3">
+                      <img
+                        [src]="fileData.preview"
+                        [alt]="fileData.file.name"
+                        class="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                      >
+                    </div>
+
+                    <div class="file-info">
+                      <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate mb-1">{{ fileData.file.name }}</h4>
+                      <p class="text-xs text-gray-600 dark:text-gray-400">{{ formatFileSize(fileData.file.size) }}</p>
+                      @if (fileData.dimensions) {
+                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                          {{ fileData.dimensions.width }}×{{ fileData.dimensions.height }}
+                        </p>
+                      }
+                    </div>
+
+                    <div class="file-actions mt-3 flex justify-end">
+                      <button
+                        type="button"
+                        (click)="removeFile(fileData.file.name)"
+                        class="p-1 text-red-600 hover:text-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 rounded transition-colors duration-200"
+                        [attr.aria-label]="'IMAGE_UPLOAD.REMOVE_FILE' | translate"
+                      >
+                        <mat-icon class="text-sm">close</mat-icon>
+                      </button>
+                    </div>
+
+                    <!-- Barre de progression pour ce fichier -->
+                    @if (fileData.uploading) {
+                      <div class="mt-2">
+                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                          <div
+                            class="bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300"
+                            [style.width.%]="fileData.progress"
+                          ></div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+      </div>
+
+      <!-- Formulaire de métadonnées -->
+      @if (selectedFiles().length > 0) {
+        <form [formGroup]="metadataForm" class="metadata-form space-y-6">
+        <div class="border-b border-gray-200 dark:border-gray-600 pb-6">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            {{ 'IMAGE_UPLOAD.METADATA' | translate }}
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="altText" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {{ 'IMAGE_UPLOAD.ALT_TEXT' | translate }}
+              </label>
+              <input
+                id="altText"
+                type="text"
+                formControlName="altText"
+                [placeholder]="'IMAGE_UPLOAD.ALT_TEXT_PLACEHOLDER' | translate"
+                class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              >
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ 'IMAGE_UPLOAD.ALT_TEXT_HINT' | translate }}</p>
+            </div>
+
+            <div>
+              <label for="storageType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {{ 'IMAGE_UPLOAD.STORAGE_TYPE' | translate }}
+              </label>
+              <select
+                id="storageType"
+                formControlName="storageType"
+                class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              >
+                <option value="local">{{ 'IMAGE_UPLOAD.STORAGE_LOCAL' | translate }}</option>
+                <option value="s3">{{ 'IMAGE_UPLOAD.STORAGE_S3' | translate }}</option>
+                <option value="cloudinary">{{ 'IMAGE_UPLOAD.STORAGE_CLOUDINARY' | translate }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {{ 'IMAGE_UPLOAD.DESCRIPTION' | translate }}
+            </label>
+            <textarea
+              id="description"
+              formControlName="description"
+              rows="3"
+              [placeholder]="'IMAGE_UPLOAD.DESCRIPTION_PLACEHOLDER' | translate"
+              class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {{ 'IMAGE_UPLOAD.TAGS' | translate }}
+              </label>
+
+              <!-- Tags display -->
+              @if (tags().length > 0) {
+                <div class="flex flex-wrap gap-2 mb-2">
+                  @for (tag of tags(); track tag) {
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-700">
+                      {{ tag }}
+                      <button
+                        type="button"
+                        (click)="removeTag(tag)"
+                        class="ml-1 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 focus:outline-none"
+                      >
+                        <mat-icon class="text-xs">close</mat-icon>
+                      </button>
+                    </span>
+                  }
+                </div>
+              }
+
+              <input
+                id="tags"
+                type="text"
+                #tagInput
+                (keyup.enter)="addTagFromInput(tagInput)"
+                [placeholder]="'IMAGE_UPLOAD.TAGS_PLACEHOLDER' | translate"
+                class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              >
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ 'IMAGE_UPLOAD.TAGS_HINT' | translate }}</p>
+            </div>
+
+            <div class="flex items-center">
+              <div class="flex items-center h-5">
+                <input
+                  id="isPublic"
+                  type="checkbox"
+                  formControlName="isPublic"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
+                >
+              </div>
+              <div class="ml-3 text-sm">
+                <label for="isPublic" class="font-medium text-gray-700 dark:text-gray-300">
+                  {{ 'IMAGE_UPLOAD.PUBLIC' | translate }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Associations optionnelles -->
+        @if (showAssociations()) {
+          <div class="associations">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+              {{ 'IMAGE_UPLOAD.ASSOCIATIONS' | translate }}
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              @if (associationType() === 'post' || !associationType()) {
+                <div>
+                  <label for="postId" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ 'IMAGE_UPLOAD.POST_ID' | translate }}
+                  </label>
+                  <input
+                    id="postId"
+                    type="text"
+                    formControlName="postId"
+                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  >
+                </div>
+              }
+
+              @if (associationType() === 'user' || !associationType()) {
+                <div>
+                  <label for="profileUserId" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ 'IMAGE_UPLOAD.USER_ID' | translate }}
+                  </label>
+                  <input
+                    id="profileUserId"
+                    type="text"
+                    formControlName="profileUserId"
+                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  >
+                </div>
+              }
+
+              @if (associationType() === 'organization' || !associationType()) {
+                <div>
+                  <label for="orgId" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ 'IMAGE_UPLOAD.ORG_ID' | translate }}
+                  </label>
+                  <input
+                    id="orgId"
+                    type="text"
+                    formControlName="orgId"
+                    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  >
+                </div>
+              }
+            </div>
+          </div>
+        }
+        </form>
+
+        <!-- Actions -->
+        <div class="pt-6 flex justify-end space-x-3">
+          <button
+            type="button"
+            (click)="clearFiles()"
+            [disabled]="selectedFiles().length === 0 || uploading()"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            {{ 'IMAGE_UPLOAD.CLEAR' | translate }}
+          </button>
+
+          <button
+            type="button"
+            (click)="uploadFiles()"
+            [disabled]="selectedFiles().length === 0 || uploading() || metadataForm.invalid"
+            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            @if (uploading()) {
+              <mat-icon class="mr-2">hourglass_empty</mat-icon>
+            }
+            {{ uploading() ? ('IMAGE_UPLOAD.UPLOADING' | translate) : ('IMAGE_UPLOAD.UPLOAD' | translate) }}
+          </button>
+        </div>
+
+        <!-- Barre de progression globale -->
+        @if (uploading()) {
+          <div class="mt-4">
+            <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+              <div
+                class="bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300"
+                [style.width.%]="overallProgress()"
+              ></div>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center">
+              {{ 'IMAGE_UPLOAD.PROGRESS' | translate }}: {{ overallProgress() | number:'1.0-0' }}%
+            </p>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>
