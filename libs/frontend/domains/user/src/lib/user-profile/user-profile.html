@@ -22,11 +22,11 @@
                   <input
                     id="firstName"
                     type="text"
-                    [control]="personalForm.firstName"
+                    [field]="personalForm.firstName"
                     class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     placeholder="Enter your first name"
                   />
-                  <lib-field-error [field]="personalForm.firstName()" />
+                  <lib-field-error [fieldError]="personalForm.firstName()" />
                 </div>
 
                 <!-- Last Name -->
@@ -37,11 +37,11 @@
                   <input
                     id="lastName"
                     type="text"
-                    [control]="personalForm.lastName"
+                    [field]="personalForm.lastName"
                     class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     placeholder="Enter your last name"
                   />
-                  <lib-field-error [field]="personalForm.lastName()" />
+                  <lib-field-error [fieldError]="personalForm.lastName()" />
                 </div>
               </div>
 
@@ -53,10 +53,10 @@
                 <input
                   id="dateOfBirth"
                   type="date"
-                  [control]="personalForm.dateOfBirth"
+                  [field]="personalForm.dateOfBirth"
                   class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 />
-                <lib-field-error [field]="personalForm.dateOfBirth()" />
+                <lib-field-error [fieldError]="personalForm.dateOfBirth()" />
               </div>
             </div>
 
@@ -73,11 +73,11 @@
                   <input
                     id="password"
                     type="password"
-                    [control]="personalForm.password"
+                    [field]="personalForm.password"
                     class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     placeholder="Enter a strong password"
                   />
-                  <lib-field-error [field]="personalForm.password()" />
+                  <lib-field-error [fieldError]="personalForm.password()" />
                 </div>
 
                 <!-- Confirm Password with Cross-field Validation -->
@@ -88,14 +88,14 @@
                   <input
                     id="confirmPassword"
                     type="password"
-                    [control]="personalForm.confirmPassword"
+                    [field]="personalForm.confirmPassword"
                     class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     placeholder="Confirm your password"
                   />
-                  <lib-field-error [field]="personalForm.confirmPassword()" />
+                  <lib-field-error [fieldError]="personalForm.confirmPassword()" />
                 </div>
 
-                <lib-field-error [field]="personalForm()"></lib-field-error>
+                <lib-field-error [fieldError]="personalForm()"></lib-field-error>
               </div>
             </div>
 
@@ -110,7 +110,7 @@
                     id="hasEmergencyContact"
                     type="checkbox"
                     class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    [control]="personalForm.hasEmergencyContact"
+                    [field]="personalForm.hasEmergencyContact"
                   />
                   <label for="hasEmergencyContact" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                     I have an emergency contact
@@ -128,11 +128,11 @@
                     <input
                       id="emergencyContactName"
                       type="text"
-                      [control]="personalForm.emergencyContactName"
+                      [field]="personalForm.emergencyContactName"
                       class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       placeholder="Enter emergency contact name"
                     />
-                    <lib-field-error [field]="personalForm.emergencyContactName()" />
+                    <lib-field-error [fieldError]="personalForm.emergencyContactName()" />
                   </div>
 
                   <div>
@@ -145,11 +145,11 @@
                     <input
                       id="emergencyContactPhone"
                       type="tel"
-                      [control]="personalForm.emergencyContactPhone"
+                      [field]="personalForm.emergencyContactPhone"
                       class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                       placeholder="Enter emergency contact phone"
                     />
-                    <lib-field-error [field]="personalForm.emergencyContactPhone()" />
+                    <lib-field-error [fieldError]="personalForm.emergencyContactPhone()" />
                   </div>
                 </div>
               </div>

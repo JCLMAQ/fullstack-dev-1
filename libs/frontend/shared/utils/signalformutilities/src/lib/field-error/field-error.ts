@@ -8,5 +8,5 @@ import { FieldState } from '@angular/forms/signals';
   styleUrl: './field-error.scss',
 })
 export class FieldError {
-   field = input.required<FieldState<any, any>>();
+  fieldError = input.required<FieldState<any, any>>();
 }
