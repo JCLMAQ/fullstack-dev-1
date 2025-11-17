@@ -114,6 +114,14 @@ export class AuthService {
     // await this.router.navigateByUrl('/login');
   }
 
+  /**
+   * Met à jour les données utilisateur localement
+   * @param userData - Nouvelles données utilisateur
+   */
+  updateUserData(userData: IUserLogged) {
+    this.#userSignal.set(userData);
+  }
+
   async fetchUser(): Promise<IUserLogged | undefined | null> {
 
     //  get user data from backend with authToken
