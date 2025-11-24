@@ -8,12 +8,12 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/apps/backend/nest-app"],
       "options": {
-        "command": "npx webpack --config webpack.config.js --mode production",
+        "command": "webpack-cli build --config webpack.config.cjs --node-env=production",
         "cwd": "apps/backend/nest-app"
       },
       "configurations": {
         "development": {
-          "command": "npx webpack --config webpack.config.js --mode development"
+          "command": "webpack-cli build --config webpack.config.cjs --node-env=development"
         }
       }
     },

@@ -1,8 +1,11 @@
 // Create the "proxy configuration file" for the Angular app
-
-const { writeFile } = require('fs');
+import { writeFile } from 'fs';
 // read server variables from .env file with dotenvx (automatic expansion)
-require('@dotenvx/dotenvx/config');
+import '@dotenvx/dotenvx/config';
+
+// const { writeFile } = require('fs');
+// // read server variables from .env file with dotenvx (automatic expansion)
+// require('@dotenvx/dotenvx/config');
 
 // Verify that all variables are provided
 if (!process.env.API_BACKEND || !process.env.API_BACKEND_PORT || !process.env.NEST_SERVER_SECURE || !process.env.NEST_SERVER_PATHREWRITE || !process.env.NEST_SERVER_LOGLEVEL || !process.env.NEST_SERVER_CHANGEORIGINE) {
